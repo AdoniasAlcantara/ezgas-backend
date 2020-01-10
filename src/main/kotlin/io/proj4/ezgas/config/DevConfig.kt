@@ -26,7 +26,7 @@ class DevConfig {
     companion object {
         @JvmStatic
         fun findIdsByLocation(conn: Connection, latitude: Double, longitude: Double, range: Float): ResultSet {
-            return conn.prepareStatement("SELECT id FROM GasStation").executeQuery()
+            return conn.prepareStatement("SELECT id FROM Station").executeQuery()
         }
     }
 }

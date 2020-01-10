@@ -1,4 +1,3 @@
 package io.proj4.ezgas.error
 
-class ResourceNotFound(message: String) : RuntimeException(message) {
-}
+class ResourceNotFoundException(message: String) : RuntimeException(message)

@@ -1,20 +1,14 @@
 package io.proj4.ezgas.model
 
 import java.math.BigDecimal
-import javax.persistence.*
-import javax.persistence.EnumType.STRING
-import javax.persistence.GenerationType.IDENTITY
+import java.time.LocalDateTime
+import javax.persistence.EmbeddedId
+import javax.persistence.Entity
 
 @Entity
 data class Fuel(
-        @Id @GeneratedValue(strategy = IDENTITY)
-        val id: Int,
-
-        @Enumerated(STRING)
-        val type: Type,
+        @EmbeddedId
+        val key: FuelKey,
+        val updated: LocalDateTime,
         val price: BigDecimal
-) {
-    enum class Type {
-        GASOLINE, ETHANOL, DIESEL, DIESEL_S10
-    }
-}
+)

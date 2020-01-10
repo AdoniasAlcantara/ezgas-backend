@@ -6,7 +6,7 @@ import javax.persistence.GenerationType.IDENTITY
 import javax.persistence.Id
 
 @Entity
-class Brand(
+data class Brand(
         @Id
         @GeneratedValue(strategy = IDENTITY)
         val id: Int,
