@@ -1,5 +1,7 @@
 package io.proj4.ezgas.response
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter
+
 class StationDto(
         val id: Int,
         val company: String,
@@ -10,5 +12,7 @@ class StationDto(
         val address: String,
         val city: String,
         val state: String,
-        val fuels: List<FuelDto>
+
+        @get:JsonAnyGetter
+        val fuels: Map<String, FuelDto>
 )

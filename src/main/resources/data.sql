@@ -28,12 +28,12 @@ INSERT INTO Station(id, company, brandId, latitude, longitude, address, number, 
 
 -- Fuels
 INSERT INTO Fuel(stationId, type, updated, price) VALUES
-    (2340, 'GASOLINE', '2019-04-08T00:00:00', 4.68),
+    (2340, 'GASOLINE', '2019-04-08T00:00:00', 4.65),
     (2340, 'ETHANOL', '2019-04-08T00:00:00', 4.68),
     (2340, 'DIESEL', '2019-04-08T00:00:00', 4.68),
     (2340, 'DIESEL_S10', '2019-04-08T00:00:00', 4.68),
     (2341, 'GASOLINE', '2019-04-08T00:00:00', 4.68),
-    (2341, 'ETHANOL', '2019-04-08T00:00:00', 4.68),
+    (2341, 'ETHANOL', '2019-04-08T00:00:00', 2.68),
     (2341, 'DIESEL', '2019-04-08T00:00:00', 4.68),
     (2341, 'DIESEL_S10', '2019-04-08T00:00:00', 4.68),
     (2343, 'GASOLINE', '2019-04-08T00:00:00', 4.68),

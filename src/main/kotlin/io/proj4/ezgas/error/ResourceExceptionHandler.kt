@@ -24,19 +24,22 @@ class ResourceExceptionHandler {
 
     @ExceptionHandler(BindException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun handleBindError(exception: BindException, request: HttpServletRequest): Error {
-        return ValidationError(
+    fun handleBindError(exception: BindException, request: HttpServletRequest): ValidationError {
+        val error = Error(
                 HttpStatus.BAD_REQUEST.value(),
                 request.path,
-                "Validation error",
-                exception.fieldErrors.map {
-                    FieldError(
-                            it.field,
-                            it.defaultMessage ?: "unspecified",
-                            it.rejectedValue
-                    )
-                }
+                "Validation error"
         )
+
+        val fieldErrors = exception.fieldErrors.map {
+            FieldError(
+                    it.field,
+                    it.defaultMessage ?: "unspecified",
+                    it.rejectedValue
+            )
+        }
+
+        return ValidationError(error, fieldErrors)
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException::class)

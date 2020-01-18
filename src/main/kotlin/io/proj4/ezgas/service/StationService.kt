@@ -3,30 +3,23 @@ package io.proj4.ezgas.service
 import io.proj4.ezgas.error.ResourceNotFoundException
 import io.proj4.ezgas.model.Station
 import io.proj4.ezgas.repository.StationRepository
-import io.proj4.ezgas.repository.StationSpec
-import io.proj4.ezgas.request.NearbyQuery
+import io.proj4.ezgas.request.NearbyStationsQuery
+import io.proj4.ezgas.request.StationsByIdQuery
 import io.proj4.ezgas.response.FuelDto
 import io.proj4.ezgas.response.StationDto
+import io.proj4.ezgas.util.isoDateTime
 import org.springframework.stereotype.Service
-import java.time.format.DateTimeFormatter
 
 @Service
 class StationService(private val repository: StationRepository) {
 
-    fun findByIds(ids: List<Int>) = repository.findByIds(ids)
-            .ifEmpty { throw ResourceNotFoundException("No stations found with ids: $ids") }
+    fun findById(query: StationsByIdQuery) = repository.findById(query)
+            .ifEmpty { throw ResourceNotFoundException("No stations found with ids: ${query.ids}") }
             .map(this::toDto)
 
-    fun findNearby(query: NearbyQuery) = with(query) {
-        val stationIds = repository.findIdsByLocation(latitude, longitude, range)
-                .ifEmpty { throw ResourceNotFoundException("No stations found at current location") }
-
-        val spec = StationSpec(stationIds, brands, fuelType, sortBy)
-
-        return@with repository.findAll(spec)
-                .ifEmpty { throw ResourceNotFoundException("Query parameters do not match any gas station result") }
-                .map(this@StationService::toDto)
-    }
+    fun findNearby(query: NearbyStationsQuery) = repository.findNearby(query)
+            .ifEmpty { throw ResourceNotFoundException("No stations found at current position") }
+            .map(this::toDto)
 
     private fun toDto(entity: Station) = with(entity) {
         val (brandId, brandName) = with(brand) { id to name }
@@ -41,10 +34,9 @@ class StationService(private val repository: StationRepository) {
 
         val (city, state) = with(location) { city.name to city.state.name }
 
-        val fuels = fuels.map {
-            FuelDto(
-                    it.key.type.name,
-                    it.updated.format(DateTimeFormatter.ISO_DATE_TIME),
+        val fuels = fuels.associate {
+            it.key.type.simpleName to FuelDto(
+                    it.updated.isoDateTime,
                     it.price.toString()
             )
         }

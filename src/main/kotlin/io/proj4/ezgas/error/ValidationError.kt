@@ -1,9 +1,9 @@
 package io.proj4.ezgas.error
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped
+
 class ValidationError(
-        status: Int,
-        path: String,
-        message: String,
+        @JsonUnwrapped
+        val error: Error,
         val fieldErrors: List<FieldError>
-) : Error(status, path, message) {
-}
+)

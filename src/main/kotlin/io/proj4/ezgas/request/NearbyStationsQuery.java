@@ -8,15 +8,15 @@ import org.jetbrains.annotations.Nullable;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
-public class NearbyQuery {
+public class NearbyStationsQuery {
     @NotNull @Range(min = -90, max = 90)
     private Double latitude;
 
     @NotNull @Range(min = -180, max = 180)
     private Double longitude;
 
-    @Range(min = 1, max = 25)
-    private float range = 15f;
+    @Range(min = 100, max = 25000)
+    private float distance = 15000f;
 
     @NotNull
     private FuelType fuelType;
@@ -34,8 +34,8 @@ public class NearbyQuery {
         return longitude;
     }
 
-    public float getRange() {
-        return range;
+    public float getDistance() {
+        return distance;
     }
 
     public FuelType getFuelType() {
@@ -59,8 +59,8 @@ public class NearbyQuery {
         this.longitude = longitude;
     }
 
-    public void setRange(float range) {
-        this.range = range;
+    public void setDistance(float range) {
+        this.distance = range;
     }
 
     public void setFuelType(FuelType fuelType) {
