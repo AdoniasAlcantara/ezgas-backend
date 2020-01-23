@@ -5,7 +5,9 @@ import io.proj4.ezgas.model.SortCriteria;
 import org.hibernate.validator.constraints.Range;
 import org.jetbrains.annotations.Nullable;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
 import java.util.Set;
 
 public class NearbyStationsQuery {
@@ -21,8 +23,8 @@ public class NearbyStationsQuery {
     @NotNull
     private FuelType fuelType;
 
-    @Nullable
-    private Set<Integer> brands;
+    @NotNull
+    private Set<Integer> brands = new HashSet<>();
 
     private SortCriteria sortBy = SortCriteria.PRICE;
 
@@ -42,7 +44,6 @@ public class NearbyStationsQuery {
         return fuelType;
     }
 
-    @Nullable
     public Set<Integer> getBrands() {
         return brands;
     }

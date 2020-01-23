@@ -5,6 +5,7 @@ import io.proj4.ezgas.request.NearbyStationsQuery
 import io.proj4.ezgas.request.StationsByIdQuery
 
 interface StationRepository {
+    fun findById(id: Int): Station?
+    fun findByIds(requestQuery: StationsByIdQuery): List<Station>
     fun findNearby(requestQuery: NearbyStationsQuery): List<Station>
-    fun findById(requestQuery: StationsByIdQuery): List<Station>
 }

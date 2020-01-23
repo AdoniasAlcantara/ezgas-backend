@@ -13,7 +13,11 @@ import org.springframework.stereotype.Service
 @Service
 class StationService(private val repository: StationRepository) {
 
-    fun findById(query: StationsByIdQuery) = repository.findById(query)
+    fun findById(id: Int) = repository.findById(id)
+            ?.let(this::toDto)
+            ?: throw ResourceNotFoundException("No station found with id: $id")
+
+    fun findByIds(query: StationsByIdQuery) = repository.findByIds(query)
             .ifEmpty { throw ResourceNotFoundException("No stations found with ids: ${query.ids}") }
             .map(this::toDto)
 

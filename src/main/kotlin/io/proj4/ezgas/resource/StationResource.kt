@@ -11,8 +11,11 @@ import javax.validation.Valid
 @RequestMapping("/stations")
 class StationResource(private val service: StationService) {
 
-    @GetMapping("/{ids}")
-    fun getById(@Valid query: StationsByIdQuery) = ResponseEntity.ok(service.findById(query))
+    @GetMapping("{id}")
+    fun getById(@PathVariable id: Int) = ResponseEntity.ok(service.findById(id))
+
+    @GetMapping
+    fun getByIds(@Valid query: StationsByIdQuery) = ResponseEntity.ok(service.findByIds(query))
 
     @GetMapping("/nearby")
     fun getNearby(@Valid query: NearbyStationsQuery) = ResponseEntity.ok(service.findNearby(query))

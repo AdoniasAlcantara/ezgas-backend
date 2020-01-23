@@ -13,7 +13,25 @@ import javax.persistence.criteria.*
 @Suppress("UNCHECKED_CAST")
 class StationRepositoryImpl(private val entityManager: EntityManager) : StationRepository {
 
-    override fun findById(requestQuery: StationsByIdQuery): List<Station> = with(requestQuery) {
+    override fun findById(id: Int): Station? {
+        val (builder, query, root) = createQuery()
+
+        root.run {
+            fetch<Station, Brand>("brand")
+            fetch<Station, Fuel>("fuels")
+            fetch<Station, Location>("location")
+                    .fetch<Location, City>("city")
+                    .fetch<City, State>("state")
+        }
+
+        query.distinct(true).where(builder.equal(root.get<Int>("id"), id))
+
+        return kotlin.runCatching {
+            entityManager.createQuery(query).singleResult
+        }.getOrNull()
+    }
+
+    override fun findByIds(requestQuery: StationsByIdQuery): List<Station> = with(requestQuery) {
         val (_, query, root) = createQuery()
         val predicates = mutableListOf<Predicate>(root.get<Int>("id").`in`(ids))
 
@@ -25,9 +43,12 @@ class StationRepositoryImpl(private val entityManager: EntityManager) : StationR
         }
 
         val fuelJoin = root.fetch<Station, Fuel>("fuels") as Join<Station, Fuel>
-        fuelType?.let { predicates.add(fuelJoin.get<FuelKey>("key").get<FuelType>("type").`in`(fuelType)) }
-        query.distinct(true).where(*predicates.toTypedArray())
 
+        if (fuelTypes.any()) {
+            predicates.add(fuelJoin.get<FuelKey>("key").get<FuelType>("type").`in`(fuelTypes))
+        }
+
+        query.distinct(true).where(*predicates.toTypedArray())
         return entityManager.createQuery(query).resultList
     }
 
@@ -40,7 +61,10 @@ class StationRepositoryImpl(private val entityManager: EntityManager) : StationR
                 .fetch<City, State>("state")
 
         val brandJoin = root.fetch<Station, Brand>("brand") as Join<Station, Brand>
-        brands?.let { predicates.add(brandJoin.`in`(it)) }
+
+        if (brands.any()) {
+            predicates.add(brandJoin.`in`(brands))
+        }
 
         val fuelJoin = root.fetch<Station, Fuel>("fuels") as Join<Station, Fuel>
         predicates.add(builder.equal(fuelJoin.get<FuelKey>("key").get<FuelType>("type"), fuelType))

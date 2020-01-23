@@ -13,5 +13,6 @@ data class FuelKey(
         val id: Int,
 
         @Enumerated(STRING)
+        @Column(columnDefinition = "CHAR(16)")
         val type: FuelType
 ) : Serializable
