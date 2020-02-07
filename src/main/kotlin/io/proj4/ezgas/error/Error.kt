@@ -1,6 +1,6 @@
 package io.proj4.ezgas.error
 
-class Error(
+open class Error(
         val status: Int,
         val path: String,
         val message: String

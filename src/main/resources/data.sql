@@ -4,15 +4,15 @@ INSERT INTO Brand(id, name) VALUES
     (6, 'Branca'),
     (18, 'Ipiranga'),
     (25, 'Petrobrás'),
-    (31, 'Raízen');
+    (31, 'Raízen')$$
 
 -- States
 INSERT INTO State(code, name) VALUES
-    ('BA', 'Bahia');
+    ('BA', 'Bahia')$$
 
 -- Cities
 INSERT INTO City(id, name, stateCode) VALUES
-    (2222, 'Itabuna', 'BA');
+    (2222, 'Itabuna', 'BA')$$
 
 -- Gas stations
 INSERT INTO Station(id, company, brandId, latitude, longitude, address, number, area, cityId) VALUES
@@ -24,7 +24,7 @@ INSERT INTO Station(id, company, brandId, latitude, longitude, address, number, 
     (2345, 'Derivados de Petróleo Teuna Ltda', 18, -14.7918712, -39.2807482, 'Avenida Inácio Tosta Filho', '834', 'Centro', 2222),
     (2346, 'Peixoto Produtos de Petróleo Ltda', 31, -14.7816881, -39.2680318, 'Avenida Juracy Magalhães', '321a', 'Nossa Senhora de Fátima', 2222),
     (2347, 'Apg Comércio de Combustíveis Ltda', 2, -14.7914527, -39.2803445, 'Avenida Inácio Tosta Filho', '923', 'Centro', 2222),
-    (2349, 'Posto Universal Comércio de Combustíveis Ltda', 25, -14.7836127, -39.2682028, 'Rua Maria Olívia Rebouças', 's/n', null, 2222);
+    (2349, 'Posto Universal Comércio de Combustíveis Ltda', 25, -14.7836127, -39.2682028, 'Rua Maria Olívia Rebouças', 's/n', null, 2222)$$
 
 -- Fuels
 INSERT INTO Fuel(stationId, type, updated, price) VALUES
@@ -57,4 +57,4 @@ INSERT INTO Fuel(stationId, type, updated, price) VALUES
     (2347, 'DIESEL_S10', '2019-04-08T00:00:00', 4.68),
     (2349, 'GASOLINE', '2019-04-08T00:00:00', 4.68),
     (2349, 'ETHANOL', '2019-04-08T00:00:00', 4.68),
-    (2349, 'DIESEL_S10', '2019-04-08T00:00:00', 4.68);
+    (2349, 'DIESEL_S10', '2019-04-08T00:00:00', 4.68)$$

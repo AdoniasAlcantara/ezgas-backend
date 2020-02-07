@@ -1,6 +1,6 @@
 package io.proj4.ezgas.response
 
-class BrandDto(
+data class BrandDto(
         val id: Int,
         val name: String
 )

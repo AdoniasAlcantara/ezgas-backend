@@ -2,7 +2,7 @@ package io.proj4.ezgas.response
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 
-class StationDto(
+data class StationDto(
         val id: Int,
         val company: String,
         val brandId: Int,

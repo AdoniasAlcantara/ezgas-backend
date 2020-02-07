@@ -3,28 +3,26 @@ package io.proj4.ezgas.request;
 import io.proj4.ezgas.model.FuelType;
 import io.proj4.ezgas.model.SortCriteria;
 import org.hibernate.validator.constraints.Range;
-import org.jetbrains.annotations.Nullable;
 
 import javax.validation.constraints.NotNull;
-import java.util.Set;
 
-public class NearbyStationsQuery {
+import static io.proj4.ezgas.model.SortCriteria.PRICE;
+
+public class NearbyRequest {
     @NotNull @Range(min = -90, max = 90)
     private Double latitude;
 
     @NotNull @Range(min = -180, max = 180)
     private Double longitude;
 
-    @Range(min = 100, max = 25000)
-    private float distance = 15000f;
+    @NotNull @Range(min = 100, max = 25000)
+    private Float distance = 10000f;
 
     @NotNull
     private FuelType fuelType;
 
-    @Nullable
-    private Set<Integer> brands;
-
-    private SortCriteria sortBy = SortCriteria.PRICE;
+    @NotNull
+    private SortCriteria sortBy = PRICE;
 
     public Double getLatitude() {
         return latitude;
@@ -34,17 +32,12 @@ public class NearbyStationsQuery {
         return longitude;
     }
 
-    public float getDistance() {
+    public Float getDistance() {
         return distance;
     }
 
     public FuelType getFuelType() {
         return fuelType;
-    }
-
-    @Nullable
-    public Set<Integer> getBrands() {
-        return brands;
     }
 
     public SortCriteria getSortBy() {
@@ -59,16 +52,12 @@ public class NearbyStationsQuery {
         this.longitude = longitude;
     }
 
-    public void setDistance(float range) {
-        this.distance = range;
+    public void setDistance(Float distance) {
+        this.distance = distance;
     }
 
     public void setFuelType(FuelType fuelType) {
         this.fuelType = fuelType;
-    }
-
-    public void setBrands(@Nullable Set<Integer> brands) {
-        this.brands = brands;
     }
 
     public void setSortBy(SortCriteria sortBy) {

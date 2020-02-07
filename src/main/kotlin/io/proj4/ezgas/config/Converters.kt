@@ -12,5 +12,5 @@ class StringToFuelTypeConverter : Converter<String, FuelType> {
 
 @Component
 class StringToSortCriteriaConverter : Converter<String, SortCriteria> {
-    override fun convert(source: String): SortCriteria = SortCriteria.valueOf(source.toUpperCase())
+    override fun convert(source: String) = SortCriteria.valueOf(source.toUpperCase())
 }
