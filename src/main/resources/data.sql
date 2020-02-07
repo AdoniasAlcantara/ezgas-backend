@@ -4,15 +4,15 @@ INSERT INTO Brand(id, name) VALUES
     (6, 'Branca'),
     (18, 'Ipiranga'),
     (25, 'Petrobrás'),
-    (31, 'Raízen');
+    (31, 'Raízen')$$
 
 -- States
 INSERT INTO State(code, name) VALUES
-    ('BA', 'Bahia');
+    ('BA', 'Bahia')$$
 
 -- Cities
 INSERT INTO City(id, name, stateCode) VALUES
-    (2222, 'Itabuna', 'BA');
+    (2222, 'Itabuna', 'BA')$$
 
 -- Gas stations
 INSERT INTO Station(id, company, brandId, latitude, longitude, address, number, area, cityId) VALUES
@@ -24,7 +24,7 @@ INSERT INTO Station(id, company, brandId, latitude, longitude, address, number, 
     (2345, 'Derivados de Petróleo Teuna Ltda', 18, -14.7918712, -39.2807482, 'Avenida Inácio Tosta Filho', '834', 'Centro', 2222),
     (2346, 'Peixoto Produtos de Petróleo Ltda', 31, -14.7816881, -39.2680318, 'Avenida Juracy Magalhães', '321a', 'Nossa Senhora de Fátima', 2222),
     (2347, 'Apg Comércio de Combustíveis Ltda', 2, -14.7914527, -39.2803445, 'Avenida Inácio Tosta Filho', '923', 'Centro', 2222),
-    (2349, 'Posto Universal Comércio de Combustíveis Ltda', 25, -14.7836127, -39.2682028, 'Rua Maria Olívia Rebouças', 's/n', null, 2222);
+    (2349, 'Posto Universal Comércio de Combustíveis Ltda', 25, -14.7836127, -39.2682028, 'Rua Maria Olívia Rebouças', 's/n', null, 2222)$$
 
 -- Fuels
 INSERT INTO Fuel(stationId, type, updated, price) VALUES
@@ -33,26 +33,28 @@ INSERT INTO Fuel(stationId, type, updated, price) VALUES
     (2340, 'DIESEL', '2019-04-08T00:00:00', 3.43),
     (2340, 'DIESEL_S10', '2019-04-08T00:00:00', 3.53),
     (2341, 'GASOLINE', '2019-04-08T00:00:00', 4.68),
-    (2341, 'ETHANOL', '2019-04-08T00:00:00', 3.50),
-    (2341, 'DIESEL', '2019-04-08T00:00:00', 3.60),
-    (2341, 'DIESEL_S10', '2019-04-08T00:00:00', 3.50),
-    (2343, 'GASOLINE', '2019-04-08T00:00:00', 4.70),
-    (2343, 'ETHANOL', '2019-04-08T00:00:00', 3.50),
-    (2343, 'DIESEL', '2019-04-08T00:00:00', 3.47),
-    (2343, 'DIESEL_S10', '2019-04-08T00:00:00', 4.57),
-    (2344, 'GASOLINE', '2019-04-08T00:00:00', 4.59),
-    (2344, 'ETHANOL', '2019-04-08T00:00:00', 3.40),
-    (2344, 'DIESEL', '2019-04-08T00:00:00', 3.42),
-    (2344, 'DIESEL_S10', '2019-04-08T00:00:00', 3.52),
-    (2345, 'GASOLINE', '2019-04-08T00:00:00', 4.70),
-    (2345, 'ETHANOL', '2019-04-08T00:00:00', 3.47),
-    (2345, 'DIESEL', '2019-04-08T00:00:00', 3.60),
-    (2345, 'DIESEL_S10', '2019-04-08T00:00:00', 3.56),
-    (2346, 'GASOLINE', '2019-04-08T00:00:00', 4.59),
-    (2346, 'ETHANOL', '2019-04-08T00:00:00', 3.50),
-    (2346, 'DIESEL_S10', '2019-04-08T00:00:00', 3.60),
-    (2347, 'GASOLINE', '2019-04-08T00:00:00', 4.49),
-    (2347, 'ETHANOL', '2019-04-08T00:00:00', 3.49),
-    (2347, 'DIESEL_S10', '2019-04-08T00:00:00', 3.50),
-    (2349, 'GASOLINE', '2019-04-08T00:00:00', 4.70),
-    (2349, 'DIESEL_S10', '2019-04-08T00:00:00', 3.60);
+    (2341, 'ETHANOL', '2019-04-08T00:00:00', 2.68),
+    (2341, 'DIESEL', '2019-04-08T00:00:00', 4.68),
+    (2341, 'DIESEL_S10', '2019-04-08T00:00:00', 4.68),
+    (2343, 'GASOLINE', '2019-04-08T00:00:00', 4.68),
+    (2343, 'ETHANOL', '2019-04-08T00:00:00', 4.68),
+    (2343, 'DIESEL', '2019-04-08T00:00:00', 4.68),
+    (2343, 'DIESEL_S10', '2019-04-08T00:00:00', 4.68),
+    (2344, 'GASOLINE', '2019-04-08T00:00:00', 4.68),
+    (2344, 'ETHANOL', '2019-04-08T00:00:00', 4.68),
+    (2344, 'DIESEL', '2019-04-08T00:00:00', 4.68),
+    (2344, 'DIESEL_S10', '2019-04-08T00:00:00', 4.68),
+    (2345, 'GASOLINE', '2019-04-08T00:00:00', 4.68),
+    (2345, 'ETHANOL', '2019-04-08T00:00:00', 4.68),
+    (2345, 'DIESEL', '2019-04-08T00:00:00', 4.68),
+    (2345, 'DIESEL_S10', '2019-04-08T00:00:00', 4.68),
+    (2346, 'GASOLINE', '2019-04-08T00:00:00', 4.68),
+    (2346, 'ETHANOL', '2019-04-08T00:00:00', 4.68),
+    (2346, 'DIESEL', '2019-04-08T00:00:00', 4.68),
+    (2346, 'DIESEL_S10', '2019-04-08T00:00:00', 4.68),
+    (2347, 'ETHANOL', '2019-04-08T00:00:00', 4.68),
+    (2347, 'DIESEL', '2019-04-08T00:00:00', 4.68),
+    (2347, 'DIESEL_S10', '2019-04-08T00:00:00', 4.68),
+    (2349, 'GASOLINE', '2019-04-08T00:00:00', 4.68),
+    (2349, 'ETHANOL', '2019-04-08T00:00:00', 4.68),
+    (2349, 'DIESEL_S10', '2019-04-08T00:00:00', 4.68)$$
