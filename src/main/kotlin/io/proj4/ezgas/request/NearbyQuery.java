@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 import static io.proj4.ezgas.model.SortCriteria.PRICE;
 
-public class NearbyRequest {
+public class NearbyQuery {
     @NotNull @Range(min = -90, max = 90)
     private Double latitude;
 
@@ -22,7 +22,7 @@ public class NearbyRequest {
     private FuelType fuelType;
 
     @NotNull
-    private SortCriteria sortBy = PRICE;
+    private SortCriteria sortBy = SortCriteria.PRICE;
 
     public Double getLatitude() {
         return latitude;

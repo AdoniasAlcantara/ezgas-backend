@@ -1,10 +1,16 @@
 package io.proj4.ezgas.repository
 
+import io.proj4.ezgas.error.PageNotFoundException
 import io.proj4.ezgas.model.FuelType
 import io.proj4.ezgas.model.SortCriteria.PRICE
 import io.proj4.ezgas.model.Station
-import io.proj4.ezgas.model.StationIdWithDistance
-import io.proj4.ezgas.request.NearbyRequest
+import io.proj4.ezgas.repository.mappers.joinWithDistance
+import io.proj4.ezgas.request.NearbyQuery
+import io.proj4.ezgas.response.StationWithDistanceDto
+import io.proj4.ezgas.util.newPage
+import io.proj4.ezgas.util.slice
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Repository
 import javax.persistence.EntityManager
 
@@ -17,7 +23,7 @@ class StationRepositoryImpl(private val entityManager: EntityManager) : StationR
             JOIN FETCH s.brand
             JOIN FETCH s.location.city c
             JOIN FETCH c.state
-            JOIN FETCH s.fuels f
+            JOIN FETCH s.fuels
             WHERE s.id = :id
         """
 
@@ -28,7 +34,7 @@ class StationRepositoryImpl(private val entityManager: EntityManager) : StationR
                 .getOrNull()
     }
 
-    override fun findByIds(ids: Collection<Int>, vararg fuelTypes: FuelType): List<Station> {
+    override fun findByIdsAndFuelType(ids: Collection<Int>, vararg fuelTypes: FuelType): List<Station> {
         val jpql = """
             SELECT DISTINCT s FROM Station s
             JOIN FETCH s.brand
@@ -53,7 +59,30 @@ class StationRepositoryImpl(private val entityManager: EntityManager) : StationR
                 .resultList
     }
 
-    override fun findIdsWithDistance(nearbyRequest: NearbyRequest) = with(nearbyRequest) {
+    override fun findNearby(nearbyQuery: NearbyQuery): List<StationWithDistanceDto> {
+        val idsWithDistance = findIdsWithDistance(nearbyQuery)
+                .ifEmpty { return emptyList() }
+
+        return findByIdsAndFuelType(idsWithDistance.keys, nearbyQuery.fuelType)
+                .joinWithDistance(idsWithDistance)
+    }
+
+    override fun findNearby(nearbyQuery: NearbyQuery, pageNumber: Int, pageSize: Int): Page<StationWithDistanceDto>? {
+        val idsWithDistance = findIdsWithDistance(nearbyQuery)
+                .ifEmpty { return null }
+
+        val pageable = PageRequest.of(pageNumber, pageSize, nearbyQuery.sortBy.toSort())
+
+        val ids = idsWithDistance.keys
+                .slice(pageable)
+                .ifEmpty { throw PageNotFoundException(pageable.pageNumber) }
+
+        return findByIdsAndFuelType(ids, nearbyQuery.fuelType)
+                .joinWithDistance(idsWithDistance)
+                .run { newPage(this, pageable, idsWithDistance.count()) }
+    }
+
+    private fun findIdsWithDistance(nearbyQuery: NearbyQuery): Map<Int, Float> = with(nearbyQuery) {
         val sql = """
             SELECT id, DISTANCE(latitude, longitude, :lat, :lng) AS distance
             FROM Station JOIN Fuel ON stationId = id
@@ -62,13 +91,17 @@ class StationRepositoryImpl(private val entityManager: EntityManager) : StationR
             ORDER BY ${if (sortBy == PRICE) "price" else "distance"} ASC
         """
 
-        @Suppress("UNCHECKED_CAST")
-        return@with entityManager
-                .createNativeQuery(sql, "StationIdWithDistance")
+        return entityManager
+                .createNativeQuery(sql)
                 .setParameter("lat", latitude)
                 .setParameter("lng", longitude)
                 .setParameter("fuelType", fuelType.name)
                 .setParameter("dist", distance)
-                .resultList as List<StationIdWithDistance>
+                .resultList
+                .toList()
+                .associate {
+                    it as Array<*>
+                    it[0] as Int to it[1] as Float
+                }
     }
 }

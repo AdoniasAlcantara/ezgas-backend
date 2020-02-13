@@ -2,11 +2,16 @@ package io.proj4.ezgas.repository
 
 import io.proj4.ezgas.model.FuelType
 import io.proj4.ezgas.model.Station
-import io.proj4.ezgas.model.StationIdWithDistance
-import io.proj4.ezgas.request.NearbyRequest
+import io.proj4.ezgas.request.NearbyQuery
+import io.proj4.ezgas.response.StationWithDistanceDto
+import org.springframework.data.domain.Page
 
 interface StationRepository {
     fun findById(id: Int): Station?
-    fun findByIds(ids: Collection<Int>, vararg fuelTypes: FuelType): List<Station>
-    fun findIdsWithDistance(nearbyRequest: NearbyRequest): List<StationIdWithDistance>
+
+    fun findByIdsAndFuelType(ids: Collection<Int>, vararg fuelTypes: FuelType): List<Station>
+
+    fun findNearby(nearbyQuery: NearbyQuery): List<StationWithDistanceDto>
+
+    fun findNearby(nearbyQuery: NearbyQuery, pageNumber: Int, pageSize: Int): Page<StationWithDistanceDto>?
 }
