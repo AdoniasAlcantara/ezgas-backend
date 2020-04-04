@@ -4,8 +4,9 @@ import io.proj4.ezgas.error.ResourceNotFoundException
 import io.proj4.ezgas.model.FuelType
 import io.proj4.ezgas.model.Station
 import io.proj4.ezgas.repository.StationRepository
-import io.proj4.ezgas.repository.mappers.toDto
 import io.proj4.ezgas.request.NearbyQuery
+import io.proj4.ezgas.request.PageQuery
+import io.proj4.ezgas.response.mappers.toDto
 import org.springframework.stereotype.Service
 
 @Service
@@ -21,12 +22,7 @@ class StationService(private val repository: StationRepository) {
             .ifEmpty { throw ResourceNotFoundException("No stations found with ids: $ids") }
             .map(Station::toDto)
 
-    // This function will be removed soon
-    fun findNearby(nearbyQuery: NearbyQuery) = repository
-            .findNearby(nearbyQuery)
-            .ifEmpty { throw ResourceNotFoundException("No stations found at current location") }
-
-    fun findNearby(nearbyQuery: NearbyQuery, pageNumber: Int, pageSize: Int) = repository
-            .findNearby(nearbyQuery, pageNumber, pageSize)
+    fun findNearby(nearbyQuery: NearbyQuery, pageQuery: PageQuery) = repository
+            .findNearby(nearbyQuery, pageQuery)
             ?: throw ResourceNotFoundException("No stations found at current location")
 }

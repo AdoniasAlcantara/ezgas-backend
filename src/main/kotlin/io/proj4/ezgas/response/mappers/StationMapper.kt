@@ -1,10 +1,10 @@
-package io.proj4.ezgas.repository.mappers
+package io.proj4.ezgas.response.mappers
 
 import io.proj4.ezgas.model.Station
 import io.proj4.ezgas.response.FuelDto
 import io.proj4.ezgas.response.StationDto
 import io.proj4.ezgas.response.StationWithDistanceDto
-import io.proj4.ezgas.util.isoDateTime
+import io.proj4.ezgas.util.isoDateTimeString
 import io.proj4.ezgas.util.joinNotNullToString
 
 fun Station.toDto(): StationDto {
@@ -18,12 +18,17 @@ fun Station.toDto(): StationDto {
         )
     }
 
-    val (city, state) = with(location) { city.name to city.state.name }
+    val (city, state) = with(location) { Pair(city.name, city.state.name) }
 
-    val fuels = fuels.associate {
-        it.key.type.simpleName to FuelDto(
-                it.updated.isoDateTime,
-                it.price.toString()
+    val fuels = fuels.associate { fuel ->
+        Pair(
+                fuel.key.type.simpleName,
+                FuelDto(
+                        fuel.salePrice.toString(),
+                        fuel.purchasePrice?.toString(),
+                        fuel.updated.isoDateTimeString,
+                        fuel.source
+                )
         )
     }
 

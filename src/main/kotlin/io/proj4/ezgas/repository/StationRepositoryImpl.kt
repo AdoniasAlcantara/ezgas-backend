@@ -4,9 +4,10 @@ import io.proj4.ezgas.error.PageNotFoundException
 import io.proj4.ezgas.model.FuelType
 import io.proj4.ezgas.model.SortCriteria.PRICE
 import io.proj4.ezgas.model.Station
-import io.proj4.ezgas.repository.mappers.joinWithDistance
 import io.proj4.ezgas.request.NearbyQuery
+import io.proj4.ezgas.request.PageQuery
 import io.proj4.ezgas.response.StationWithDistanceDto
+import io.proj4.ezgas.response.mappers.joinWithDistance
 import io.proj4.ezgas.util.newPage
 import io.proj4.ezgas.util.slice
 import org.springframework.data.domain.Page
@@ -19,12 +20,12 @@ class StationRepositoryImpl(private val entityManager: EntityManager) : StationR
 
     override fun findById(id: Int): Station? {
         val jpql = """
-            SELECT DISTINCT s FROM Station s
-            JOIN FETCH s.brand
-            JOIN FETCH s.location.city c
-            JOIN FETCH c.state
-            JOIN FETCH s.fuels
-            WHERE s.id = :id
+            select distinct s from Station s
+            join fetch s.brand
+            join fetch s.location.city c
+            join fetch c.state
+            join fetch s.fuels
+            where s.id = :id
         """
 
         return entityManager
@@ -36,20 +37,16 @@ class StationRepositoryImpl(private val entityManager: EntityManager) : StationR
 
     override fun findByIdsAndFuelType(ids: Collection<Int>, vararg fuelTypes: FuelType): List<Station> {
         val jpql = """
-            SELECT DISTINCT s FROM Station s
-            JOIN FETCH s.brand
-            JOIN FETCH s.location.city c
-            JOIN FETCH c.state
-            JOIN FETCH s.fuels f
-            WHERE s.id IN(:ids) AND f.key.type IN(:fuelTypes)
-            ORDER BY FIND_IN_SET(s.id, :idsStr)
+            select distinct s from Station s
+            join fetch s.brand
+            join fetch s.location.city c
+            join fetch c.state
+            join fetch s.fuels f
+            where s.id in(:ids) and f.key.type in(:fuelTypes)
+            order by find_in_set(s.id, :idsStr)
         """
 
-        val fuelTypeSet = if (fuelTypes.any()) {
-            fuelTypes.toSet()
-        } else {
-            FuelType.values().toSet()
-        }
+        val fuelTypeSet = if (fuelTypes.any()) fuelTypes.toSet() else FuelType.values().toSet()
 
         return entityManager
                 .createQuery(jpql, Station::class.java)
@@ -59,19 +56,11 @@ class StationRepositoryImpl(private val entityManager: EntityManager) : StationR
                 .resultList
     }
 
-    override fun findNearby(nearbyQuery: NearbyQuery): List<StationWithDistanceDto> {
-        val idsWithDistance = findIdsWithDistance(nearbyQuery)
-                .ifEmpty { return emptyList() }
-
-        return findByIdsAndFuelType(idsWithDistance.keys, nearbyQuery.fuelType)
-                .joinWithDistance(idsWithDistance)
-    }
-
-    override fun findNearby(nearbyQuery: NearbyQuery, pageNumber: Int, pageSize: Int): Page<StationWithDistanceDto>? {
+    override fun findNearby(nearbyQuery: NearbyQuery, pageQuery: PageQuery): Page<StationWithDistanceDto>? {
         val idsWithDistance = findIdsWithDistance(nearbyQuery)
                 .ifEmpty { return null }
 
-        val pageable = PageRequest.of(pageNumber, pageSize, nearbyQuery.sortBy.toSort())
+        val pageable = PageRequest.of(pageQuery.pageNumber, pageQuery.pageSize, nearbyQuery.sortBy.toSort())
 
         val ids = idsWithDistance.keys
                 .slice(pageable)
@@ -84,11 +73,11 @@ class StationRepositoryImpl(private val entityManager: EntityManager) : StationR
 
     private fun findIdsWithDistance(nearbyQuery: NearbyQuery): Map<Int, Float> = with(nearbyQuery) {
         val sql = """
-            SELECT id, DISTANCE(latitude, longitude, :lat, :lng) AS distance
-            FROM Station JOIN Fuel ON stationId = id
-            WHERE type = :fuelType
-            HAVING distance <= :dist
-            ORDER BY ${if (sortBy == PRICE) "price" else "distance"} ASC
+            select id, distance(latitude, longitude, :lat, :lng) as distance
+            from Station join Fuel on stationId = id
+            where type = :fuelType
+            having distance <= :dist
+            order by ${if (sortBy == PRICE) "price" else "distance"}
         """
 
         return entityManager

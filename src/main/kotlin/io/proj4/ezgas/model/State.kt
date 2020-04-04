@@ -6,7 +6,8 @@ import javax.persistence.Id
 
 @Entity
 data class State(
-        @Id @Column(columnDefinition = "CHAR(2)")
+        @Id
+        @Column(columnDefinition = "CHAR(2)")
         val code: String,
         val name: String
 )

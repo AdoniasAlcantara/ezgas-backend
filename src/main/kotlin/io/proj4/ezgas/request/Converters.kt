@@ -1,4 +1,4 @@
-package io.proj4.ezgas.config
+package io.proj4.ezgas.request
 
 import io.proj4.ezgas.model.FuelType
 import io.proj4.ezgas.model.SortCriteria
