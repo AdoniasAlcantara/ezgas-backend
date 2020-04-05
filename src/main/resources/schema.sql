@@ -79,8 +79,9 @@ create table FuelHistory
 
 create table AnpStation
 (
-	anpKey char(41) null,
-	stationId int not null,
+	anpKey char(41),
+	stationId int null,
+	blacklisted boolean not null default false,
 	constraint anpStationPk primary key (anpKey),
 	constraint anpStationStationFk foreign key (stationId) references Station (id) on update cascade
 );
