@@ -60,7 +60,11 @@ class StationRepositoryImpl(private val entityManager: EntityManager) : StationR
         val idsWithDistance = findIdsWithDistance(nearbyQuery)
                 .ifEmpty { return null }
 
-        val pageable = PageRequest.of(pageQuery.pageNumber, pageQuery.pageSize, nearbyQuery.sortBy.toSort())
+        val pageable = PageRequest.of(
+                pageQuery.pageNumber,
+                pageQuery.pageSize,
+                nearbyQuery.sortBy.toSort()
+        )
 
         val ids = idsWithDistance.keys
                 .slice(pageable)
@@ -68,7 +72,7 @@ class StationRepositoryImpl(private val entityManager: EntityManager) : StationR
 
         return findByIdsAndFuelType(ids, nearbyQuery.fuelType)
                 .joinWithDistance(idsWithDistance)
-                .run { newPage(this, pageable, idsWithDistance.count()) }
+                .let { newPage(it, pageable, idsWithDistance.count()) }
     }
 
     private fun findIdsWithDistance(nearbyQuery: NearbyQuery): Map<Int, Float> = with(nearbyQuery) {
@@ -77,7 +81,7 @@ class StationRepositoryImpl(private val entityManager: EntityManager) : StationR
             from Station join Fuel on stationId = id
             where type = :fuelType
             having distance <= :dist
-            order by ${if (sortBy == PRICE) "price" else "distance"}
+            order by ${if (sortBy == PRICE) "salePrice" else "distance"}
         """
 
         return entityManager
@@ -87,7 +91,6 @@ class StationRepositoryImpl(private val entityManager: EntityManager) : StationR
                 .setParameter("fuelType", fuelType.name)
                 .setParameter("dist", distance)
                 .resultList
-                .toList()
                 .associate {
                     it as Array<*>
                     it[0] as Int to it[1] as Float
