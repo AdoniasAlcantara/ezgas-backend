@@ -12,8 +12,6 @@ import javax.validation.constraints.NotEmpty
 
 @RestController
 @RequestMapping("/stations")
-@ResponseStatus(HttpStatus.OK)
-@Validated
 class StationController(private val service: StationService) {
 
     @GetMapping("/{id}")
@@ -30,4 +28,9 @@ class StationController(private val service: StationService) {
             @Valid nearbyQuery: NearbyQuery,
             @Valid pageQuery: PageQuery
     ) = service.findNearby(nearbyQuery, pageQuery)
+
+    @GetMapping("/test")
+    fun test(@Valid nearbyQuery: NearbyQuery) {
+        println(nearbyQuery)
+    }
 }

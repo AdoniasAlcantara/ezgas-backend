@@ -7,6 +7,7 @@ import javax.persistence.GenerationType.IDENTITY
 data class City(
         @Id
         @GeneratedValue(strategy = IDENTITY)
+        @Column(name = "cityId")
         val id: Int,
         val name: String,
 

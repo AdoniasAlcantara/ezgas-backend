@@ -1,67 +1,26 @@
-package io.proj4.ezgas.request;
+package io.proj4.ezgas.request
 
-import io.proj4.ezgas.model.FuelType;
-import io.proj4.ezgas.model.SortCriteria;
-import org.hibernate.validator.constraints.Range;
+import io.proj4.ezgas.model.FuelType
+import io.proj4.ezgas.model.SortCriteria
+import org.hibernate.validator.constraints.Range
+import javax.validation.constraints.NotNull
 
-import javax.validation.constraints.NotNull;
+data class NearbyQuery(
+        @field:NotNull
+        @field:Range(min = -90, max = 90)
+        val latitude: Double? = null,
 
-public class NearbyQuery {
-    @NotNull
-    @Range(min = -90, max = 90)
-    private Double latitude;
+        @field:NotNull
+        @field:Range(min = -180, max = 180)
+        val longitude: Double? = null,
 
-    @NotNull
-    @Range(min = -180, max = 180)
-    private Double longitude;
+        @field:NotNull
+        @field:Range(min = 100, max = 25000)
+        val distance:  Float? = 10000f,
 
-    @NotNull
-    @Range(min = 100, max = 25000)
-    private Float distance = 10000f;
+        @field:NotNull
+        val fuel:  FuelType? = null,
 
-    @NotNull
-    private FuelType fuelType;
-
-    @NotNull
-    private SortCriteria sortBy = SortCriteria.PRICE;
-
-    public Double getLatitude() {
-        return latitude;
-    }
-
-    public Double getLongitude() {
-        return longitude;
-    }
-
-    public Float getDistance() {
-        return distance;
-    }
-
-    public FuelType getFuelType() {
-        return fuelType;
-    }
-
-    public SortCriteria getSortBy() {
-        return sortBy;
-    }
-
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
-
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
-    }
-
-    public void setDistance(Float distance) {
-        this.distance = distance;
-    }
-
-    public void setFuelType(FuelType fuelType) {
-        this.fuelType = fuelType;
-    }
-
-    public void setSortBy(SortCriteria sortBy) {
-        this.sortBy = sortBy;
-    }
-}
+        @NotNull
+        val sort: SortCriteria? = SortCriteria.PRICE
+)

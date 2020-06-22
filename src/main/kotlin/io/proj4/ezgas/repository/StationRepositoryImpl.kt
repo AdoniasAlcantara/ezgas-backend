@@ -61,16 +61,16 @@ class StationRepositoryImpl(private val entityManager: EntityManager) : StationR
                 .ifEmpty { return null }
 
         val pageable = PageRequest.of(
-                pageQuery.pageNumber,
-                pageQuery.pageSize,
-                nearbyQuery.sortBy.toSort()
+                pageQuery.pageNumber!!,
+                pageQuery.pageSize!!,
+                nearbyQuery.sort!!.toSort()
         )
 
         val ids = idsWithDistance.keys
                 .slice(pageable)
                 .ifEmpty { throw PageNotFoundException(pageable.pageNumber) }
 
-        return findByIdsAndFuelType(ids, nearbyQuery.fuelType)
+        return findByIdsAndFuelType(ids, nearbyQuery.fuel!!)
                 .joinWithDistance(idsWithDistance)
                 .let { newPage(it, pageable, idsWithDistance.count()) }
     }
@@ -81,14 +81,14 @@ class StationRepositoryImpl(private val entityManager: EntityManager) : StationR
             from Station join Fuel on stationId = id
             where type = :fuelType
             having distance <= :dist
-            order by ${if (sortBy == PRICE) "salePrice" else "distance"}
+            order by ${if (sort == PRICE) "salePrice" else "distance"}
         """
 
         return entityManager
                 .createNativeQuery(sql)
                 .setParameter("lat", latitude)
                 .setParameter("lng", longitude)
-                .setParameter("fuelType", fuelType.name)
+                .setParameter("fuelType", fuel!!.name)
                 .setParameter("dist", distance)
                 .resultList
                 .associate {
