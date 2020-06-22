@@ -16,10 +16,10 @@ data class NearbyQuery(
 
         @field:NotNull
         @field:Range(min = 100, max = 25000)
-        val distance:  Float? = 10000f,
+        val distance: Float? = 10000f,
 
         @field:NotNull
-        val fuel:  FuelType? = null,
+        val fuel: FuelType? = null,
 
         @NotNull
         val sort: SortCriteria? = SortCriteria.PRICE

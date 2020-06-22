@@ -1,10 +1,10 @@
 package io.proj4.ezgas.model
 
+import java.io.Serializable
 import java.math.BigDecimal
 import java.time.LocalDateTime
-import javax.persistence.Column
-import javax.persistence.EmbeddedId
-import javax.persistence.Entity
+import javax.persistence.*
+import javax.persistence.EnumType.STRING
 
 @Entity
 data class Fuel(
@@ -19,3 +19,20 @@ data class Fuel(
         val updated: LocalDateTime,
         val source: String
 )
+
+@Embeddable
+data class FuelKey(
+        @Column(name = "stationId")
+        val id: Int,
+
+        @Enumerated(STRING)
+        @Column(name = "fuelType")
+        val type: FuelType
+) : Serializable
+
+enum class FuelType(val simpleName: String) {
+    GASOLINE("gasoline"),
+    ETHANOL("ethanol"),
+    DIESEL("diesel"),
+    DIESEL_S10("dieselS10")
+}

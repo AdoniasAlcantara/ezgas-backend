@@ -2,8 +2,8 @@ package io.proj4.ezgas.response
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped
 
-data class StationWithDistanceDto(
+data class StationWithDistance(
         @JsonUnwrapped
-        val station: StationDto,
+        val station: StationResponse,
         val distance: Float
 )

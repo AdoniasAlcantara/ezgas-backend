@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull
 data class PageQuery(
         @field:NotNull
         @field:Min(0)
-        val pageNumber: Int? = null,
+        val pageNumber: Int? = 0,
 
         @NotNull
         @Min(1) @Max(50)

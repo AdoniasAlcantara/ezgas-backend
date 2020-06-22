@@ -6,7 +6,7 @@ import io.proj4.ezgas.model.SortCriteria.PRICE
 import io.proj4.ezgas.model.Station
 import io.proj4.ezgas.request.NearbyQuery
 import io.proj4.ezgas.request.PageQuery
-import io.proj4.ezgas.response.StationWithDistanceDto
+import io.proj4.ezgas.response.StationWithDistance
 import io.proj4.ezgas.response.mappers.joinWithDistance
 import io.proj4.ezgas.util.newPage
 import io.proj4.ezgas.util.slice
@@ -35,7 +35,7 @@ class StationRepositoryImpl(private val entityManager: EntityManager) : StationR
                 .getOrNull()
     }
 
-    override fun findByIdsAndFuelType(ids: Collection<Int>, vararg fuelTypes: FuelType): List<Station> {
+    override fun findByIdsAndFuels(ids: Set<Int>, fuelTypes: Set<FuelType>): List<Station> {
         val jpql = """
             select distinct s from Station s
             join fetch s.brand
@@ -43,57 +43,58 @@ class StationRepositoryImpl(private val entityManager: EntityManager) : StationR
             join fetch c.state
             join fetch s.fuels f
             where s.id in(:ids) and f.key.type in(:fuelTypes)
-            order by find_in_set(s.id, :idsStr)
         """
-
-        val fuelTypeSet = if (fuelTypes.any()) fuelTypes.toSet() else FuelType.values().toSet()
 
         return entityManager
                 .createQuery(jpql, Station::class.java)
                 .setParameter("ids", ids)
-                .setParameter("fuelTypes", fuelTypeSet)
-                .setParameter("idsStr", ids.joinToString(","))
+                .setParameter("fuelTypes", fuelTypes.toSet())
                 .resultList
+                .sortedBy { station -> ids.indexOf(station.id) }
     }
 
-    override fun findNearby(nearbyQuery: NearbyQuery, pageQuery: PageQuery): Page<StationWithDistanceDto>? {
+    override fun findNearby(nearbyQuery: NearbyQuery, pageQuery: PageQuery): Page<StationWithDistance>? {
         val idsWithDistance = findIdsWithDistance(nearbyQuery)
                 .ifEmpty { return null }
 
-        val pageable = PageRequest.of(
+        val pageRequest = PageRequest.of(
                 pageQuery.pageNumber!!,
                 pageQuery.pageSize!!,
                 nearbyQuery.sort!!.toSort()
         )
 
         val ids = idsWithDistance.keys
-                .slice(pageable)
-                .ifEmpty { throw PageNotFoundException(pageable.pageNumber) }
+                .slice(pageRequest)
+                .ifEmpty { throw PageNotFoundException(pageRequest.pageNumber) }
+                .toSet()
 
-        return findByIdsAndFuelType(ids, nearbyQuery.fuel!!)
+        return findByIdsAndFuels(ids, setOf(nearbyQuery.fuel!!))
                 .joinWithDistance(idsWithDistance)
-                .let { newPage(it, pageable, idsWithDistance.count()) }
+                .let { newPage(it, pageRequest, idsWithDistance.count()) }
     }
 
     private fun findIdsWithDistance(nearbyQuery: NearbyQuery): Map<Int, Float> = with(nearbyQuery) {
         val sql = """
-            select id, distance(latitude, longitude, :lat, :lng) as distance
-            from Station join Fuel on stationId = id
-            where type = :fuelType
-            having distance <= :dist
+            select stationId, distance(latitude, longitude, :latitude, :longitude) as distance
+            from Station join Fuel using(stationId)
+            where fuelType = :fuelType
+            having distance <= :distance
             order by ${if (sort == PRICE) "salePrice" else "distance"}
         """
 
         return entityManager
                 .createNativeQuery(sql)
-                .setParameter("lat", latitude)
-                .setParameter("lng", longitude)
+                .setParameter("latitude", latitude)
+                .setParameter("longitude", longitude)
                 .setParameter("fuelType", fuel!!.name)
-                .setParameter("dist", distance)
+                .setParameter("distance", distance)
                 .resultList
                 .associate {
                     it as Array<*>
-                    it[0] as Int to it[1] as Float
+                    val stationId = it[0] as Int
+                    val distance = it[1] as Float
+
+                    stationId to distance
                 }
     }
 }

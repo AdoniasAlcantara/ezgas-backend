@@ -7,6 +7,7 @@ import javax.persistence.GenerationType.IDENTITY
 data class Station(
         @Id
         @GeneratedValue(strategy = IDENTITY)
+        @Column(name = "stationId")
         val id: Int,
         val company: String,
 

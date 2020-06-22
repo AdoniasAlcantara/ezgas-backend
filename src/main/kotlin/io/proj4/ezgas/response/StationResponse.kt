@@ -2,7 +2,7 @@ package io.proj4.ezgas.response
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 
-data class StationDto(
+data class StationResponse(
         val id: Int,
         val company: String,
         val brandId: Int,
@@ -14,5 +14,5 @@ data class StationDto(
         val state: String,
 
         @get:JsonAnyGetter
-        val fuels: Map<String, FuelDto>
+        val fuels: Map<String, FuelResponse>
 )
