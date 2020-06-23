@@ -15,6 +15,7 @@
     <artifactId>ezgas-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>EzGas-backend</name>
+    <packaging>jar</packaging>
     <description>Backend for EzGas App</description>
 
     <properties>
@@ -87,6 +88,7 @@
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
 
