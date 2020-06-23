@@ -3,6 +3,7 @@ package io.proj4.ezgas.model
 import java.io.Serializable
 import java.math.BigDecimal
 import java.time.LocalDateTime
+import java.time.OffsetDateTime
 import javax.persistence.*
 import javax.persistence.EnumType.STRING
 
@@ -16,7 +17,7 @@ data class Fuel(
 
         @Column(precision = 10, scale = 2)
         val purchasePrice: BigDecimal?,
-        val updated: LocalDateTime,
+        val updated: OffsetDateTime,
         val source: String
 )
 

@@ -4,8 +4,7 @@ import io.proj4.ezgas.model.Station
 import io.proj4.ezgas.response.FuelResponse
 import io.proj4.ezgas.response.StationResponse
 import io.proj4.ezgas.response.StationWithDistance
-import io.proj4.ezgas.util.isoDateTimeString
-import io.proj4.ezgas.util.joinNotNullToString
+import io.proj4.ezgas.utils.joinNotNullToString
 
 fun Station.asResponse(): StationResponse {
     val (brandId, brandName) = brand
@@ -18,7 +17,7 @@ fun Station.asResponse(): StationResponse {
         val fuelValue = FuelResponse(
                 fuel.salePrice.toString(),
                 fuel.purchasePrice?.toString(),
-                fuel.updated.isoDateTimeString,
+                fuel.updated,
                 fuel.source
         )
 

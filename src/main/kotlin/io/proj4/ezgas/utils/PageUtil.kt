@@ -1,4 +1,4 @@
-package io.proj4.ezgas.util
+package io.proj4.ezgas.utils
 
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable

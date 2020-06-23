@@ -8,8 +8,8 @@ import io.proj4.ezgas.request.NearbyQuery
 import io.proj4.ezgas.request.PageQuery
 import io.proj4.ezgas.response.StationWithDistance
 import io.proj4.ezgas.response.mappers.joinWithDistance
-import io.proj4.ezgas.util.newPage
-import io.proj4.ezgas.util.slice
+import io.proj4.ezgas.utils.newPage
+import io.proj4.ezgas.utils.slice
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Repository

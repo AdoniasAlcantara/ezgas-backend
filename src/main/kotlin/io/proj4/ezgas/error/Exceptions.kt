@@ -1,9 +1,9 @@
 package io.proj4.ezgas.error
 
-import org.springframework.data.domain.Pageable
+import org.springframework.http.HttpStatus.NOT_FOUND
+import org.springframework.web.server.ResponseStatusException
 
-open class ResourceNotFoundException(message: String) : RuntimeException(message)
+class ResourceNotFoundException(message: String) : ResponseStatusException(NOT_FOUND, message)
 
-class PageNotFoundException(pageNumber: Int) : ResourceNotFoundException(
-        "The requested page does not exist. Page number was $pageNumber"
-)
+class PageNotFoundException(pageNumber: Int) :
+        ResponseStatusException(NOT_FOUND, "The requested page does not exist. Page number was $pageNumber")
