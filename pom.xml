@@ -13,7 +13,7 @@
 
     <groupId>io.proj4.ezgas</groupId>
     <artifactId>ezgas-backend</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-RELEASE</version>
     <name>EzGas-backend</name>
     <packaging>jar</packaging>
     <description>Backend for EzGas App</description>
