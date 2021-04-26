@@ -1,9 +1,16 @@
 package io.proj4.ezgas.model
 
+import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint
+import org.springframework.data.mongodb.core.mapping.Document
+
+@Document("stations")
 data class Station(
-        val id: Int,
-        val company: String,
-        val brand: Brand,
-        val location: Location,
-        val fuels: Set<Fuel>
+    @Id
+    val id: String,
+    val company: String,
+    val brand: Brand,
+    val place: Place?,
+    val position: GeoJsonPoint,
+    val fuels: Map<FuelType, Fuel>?
 )

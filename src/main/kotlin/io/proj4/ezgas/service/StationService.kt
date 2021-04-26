@@ -2,12 +2,13 @@ package io.proj4.ezgas.service
 
 import io.proj4.ezgas.model.FuelType
 import io.proj4.ezgas.model.Station
+import io.proj4.ezgas.repository.StationRepository
 import io.proj4.ezgas.request.NearbyQuery
 import io.proj4.ezgas.request.PageQuery
 import org.springframework.stereotype.Service
 
 @Service
-class StationService {
+class StationService(private val repository: StationRepository) {
 
     fun findById(id: Int): Station {
         TODO("Not implemented")
