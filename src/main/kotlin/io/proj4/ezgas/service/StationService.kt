@@ -26,7 +26,7 @@ class StationService(private val repository: StationRepository) {
     fun findNearby(query: NearbyQuery, paging: Paging): Slice<Station> {
         val sort = when (query.sort!!) {
             DISTANCE -> Sort.by("distance")
-            PRICE -> Sort.by("fuels.${query.fuel}.price")
+            PRICE -> Sort.by("fuels.${query.fuel}.price", "distance")
         }
 
         val pageable = PageRequest.of(
