@@ -6,21 +6,21 @@ import org.hibernate.validator.constraints.Range
 import javax.validation.constraints.NotNull
 
 data class NearbyQuery(
-        @field:NotNull
-        @field:Range(min = -90, max = 90)
-        val latitude: Double? = null,
+    @field:NotNull
+    @field:Range(min = -90, max = 90)
+    val latitude: Double? = null,
 
-        @field:NotNull
-        @field:Range(min = -180, max = 180)
-        val longitude: Double? = null,
+    @field:NotNull
+    @field:Range(min = -180, max = 180)
+    val longitude: Double? = null,
 
-        @field:NotNull
-        @field:Range(min = 100, max = 25000)
-        val distance: Float? = 10000f,
+    @field:NotNull
+    @field:Range(min = 1, max = 25)
+    val distance: Double? = 10.0,
 
-        @field:NotNull
-        val fuel: FuelType? = null,
+    @field:NotNull
+    val fuel: FuelType? = null,
 
-        @NotNull
-        val sort: SortCriteria? = SortCriteria.PRICE
+    @NotNull
+    val sort: SortCriteria? = SortCriteria.PRICE
 )
