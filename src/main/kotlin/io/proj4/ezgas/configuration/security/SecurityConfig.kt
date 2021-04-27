@@ -1,4 +1,4 @@
-package io.proj4.ezgas.security
+package io.proj4.ezgas.configuration.security
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.config.annotation.web.builders.HttpSecurity

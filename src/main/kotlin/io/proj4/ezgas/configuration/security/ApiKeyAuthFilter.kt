@@ -1,4 +1,4 @@
-package io.proj4.ezgas.security
+package io.proj4.ezgas.configuration.security
 
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter
