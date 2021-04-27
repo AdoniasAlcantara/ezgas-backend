@@ -1,5 +1,7 @@
 package io.proj4.ezgas.model
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import io.proj4.ezgas.configuration.conversion.GeoJsonConverter
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint
 import org.springframework.data.mongodb.core.mapping.Document
@@ -10,7 +12,9 @@ data class Station(
     val id: String,
     val company: String,
     val brand: Brand,
+    val fuels: Map<FuelType, Fuel>?,
     val place: Place?,
-    val position: GeoJsonPoint,
-    val fuels: Map<FuelType, Fuel>?
+
+    @JsonSerialize(converter = GeoJsonConverter::class)
+    val position: GeoJsonPoint
 )
