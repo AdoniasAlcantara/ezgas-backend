@@ -10,6 +10,7 @@ import org.springframework.data.geo.Metrics.KILOMETERS
 import org.springframework.data.geo.Point
 import org.springframework.data.mongodb.core.MongoOperations
 import org.springframework.data.mongodb.core.aggregation.Aggregation.*
+import org.springframework.data.mongodb.core.aggregation.UnsetOperation.unset
 import org.springframework.data.mongodb.core.getCollectionName
 import org.springframework.data.mongodb.core.query.Criteria.where
 import org.springframework.data.mongodb.core.query.NearQuery.near
@@ -26,22 +27,29 @@ class StationRepositoryImpl(private val mongo: MongoOperations) : StationReposit
         pageable: Pageable
     ): Page<Station> {
         val aggregation = newAggregation(
-            geoNearOp(point, distance),
-            priceNotNullOp(fuelType)
+            geoNear(
+                near(point)
+                    .spherical(true)
+                    .maxDistance(Distance(distance, KILOMETERS))
+                    .inKilometers(),
+                "distance"
+            ),
+            match(
+                where("fuels.$fuelType.price").ne(null)
+            ),
+            unset(
+                *takeFuelFieldsExcept(fuelType)
+            )
         )
+
+        takeFuelFieldsExcept(fuelType).forEach(::println)
 
         return mongo.aggregatePage(aggregation, pageable, collection)
     }
 
-    private fun geoNearOp(point: Point, distance: Double) =
-        geoNear(
-            near(point)
-                .spherical(true)
-                .maxDistance(Distance(distance, KILOMETERS))
-                .inKilometers(),
-            "distance"
-        )
-
-    private fun priceNotNullOp(fuelType: FuelType) =
-        match(where("fuels.$fuelType.price").ne(null))
+    private fun takeFuelFieldsExcept(fuelType: FuelType) =
+        FuelType.values()
+            .filterNot { it == fuelType }
+            .map { "fuels.$it" }
+            .toTypedArray()
 }
