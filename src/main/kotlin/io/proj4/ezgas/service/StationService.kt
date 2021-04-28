@@ -7,6 +7,7 @@ import io.proj4.ezgas.model.Station
 import io.proj4.ezgas.repository.StationRepository
 import io.proj4.ezgas.request.NearbyQuery
 import io.proj4.ezgas.request.Paging
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Slice
 import org.springframework.data.domain.Sort
@@ -23,7 +24,7 @@ class StationService(private val repository: StationRepository) {
     fun findByIdsAndFuels(ids: Set<Int>, fuelTypes: Set<FuelType>?): List<Station> =
         emptyList()
 
-    fun findNearby(query: NearbyQuery, paging: Paging): Slice<Station> {
+    fun findNearby(query: NearbyQuery, paging: Paging): Page<Station> {
         val sort = when (query.sort!!) {
             DISTANCE -> Sort.by("distance")
             PRICE -> Sort.by("fuels.${query.fuel}.price", "distance")

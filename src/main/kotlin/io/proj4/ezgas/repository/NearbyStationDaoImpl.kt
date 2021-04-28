@@ -14,10 +14,9 @@ import org.springframework.data.mongodb.core.aggregation.UnsetOperation.unset
 import org.springframework.data.mongodb.core.getCollectionName
 import org.springframework.data.mongodb.core.query.Criteria.where
 import org.springframework.data.mongodb.core.query.NearQuery.near
-import org.springframework.stereotype.Repository
 
-@Repository
-class StationRepositoryImpl(private val mongo: MongoOperations) : StationRepository {
+@Suppress("unused")
+class NearbyStationDaoImpl(private val mongo: MongoOperations) : NearbyStationDao {
     private val collection = mongo.getCollectionName<Station>()
 
     override fun findNearby(
