@@ -6,8 +6,8 @@ import org.springframework.validation.BindingResult
 val BindingResult.errorDetails
     get() = fieldErrors.map {
         ErrorDetail(
-                field = it.field,
-                error = it.defaultMessage ?: "unspecified",
-                value = it.rejectedValue
+            field = it.field,
+            error = it.defaultMessage ?: "unspecified",
+            value = it.rejectedValue
         )
     }

@@ -12,17 +12,14 @@ import javax.validation.Valid
 class StationController(private val service: StationService) {
 
     @GetMapping("/{id}")
-    fun getById(@PathVariable id: Int) = service.findById(id)
+    fun getById(@PathVariable id: Int) =
+        service.findById(id)
 
     @GetMapping
-    fun getByIds(
-            @RequestParam ids: Set<Int>,
-            @RequestParam fuels: Set<FuelType>?
-    ) = service.findByIdsAndFuels(ids, fuels)
+    fun getByIds(@RequestParam ids: Set<Int>, @RequestParam fuels: Set<FuelType>?) =
+        service.findByIdsAndFuels(ids, fuels)
 
     @GetMapping("/nearby")
-    fun getNearby(
-        @Valid query: NearbyQuery,
-        @Valid paging: Paging
-    ) = service.findNearby(query, paging)
+    fun getNearby(@Valid query: NearbyQuery, @Valid paging: Paging) =
+        service.findNearby(query, paging)
 }

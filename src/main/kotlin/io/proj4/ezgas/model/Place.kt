@@ -1,6 +1,5 @@
 package io.proj4.ezgas.model
 
-
 data class Place(
     val houseNumber: String?,
     val street: String?,

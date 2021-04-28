@@ -20,8 +20,8 @@ class ExceptionHandlerAdvice : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException::class)
     fun handleMethodArgumentTypeMismatch(
-            ex: MethodArgumentTypeMismatchException,
-            request: WebRequest
+        ex: MethodArgumentTypeMismatchException,
+        request: WebRequest
     ): ResponseEntity<*> {
         val arg = ex.name
         val requiredType = ex.requiredType?.simpleName
@@ -32,35 +32,35 @@ class ExceptionHandlerAdvice : ResponseEntityExceptionHandler() {
     }
 
     override fun handleBindException(
-            ex: BindException,
-            headers: HttpHeaders,
-            status: HttpStatus,
-            request: WebRequest
+        ex: BindException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
     ) = newErrorResponse(headers, status, request, "Validation error", ex.bindingResult.errorDetails)
 
     override fun handleMissingServletRequestParameter(
-            ex: MissingServletRequestParameterException,
-            headers: HttpHeaders,
-            status: HttpStatus,
-            request: WebRequest
+        ex: MissingServletRequestParameterException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
     ) = newErrorResponse(headers, status, request, ex.message)
 
     private fun newErrorResponse(
-            headers: HttpHeaders,
-            status: HttpStatus,
-            request: WebRequest,
-            message: String? = null,
-            details: List<ErrorDetail>? = null
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest,
+        message: String? = null,
+        details: List<ErrorDetail>? = null
     ): ResponseEntity<Any> {
         request as ServletWebRequest
 
         val errorResponse = ErrorResponse(
-                timestamp = OffsetDateTime.now(),
-                status = status.value(),
-                error = status.reasonPhrase,
-                message = message ?: "unspecified",
-                path = request.request.requestURI,
-                details = details
+            timestamp = OffsetDateTime.now(),
+            status = status.value(),
+            error = status.reasonPhrase,
+            message = message ?: "unspecified",
+            path = request.request.requestURI,
+            details = details
         )
 
         return ResponseEntity(errorResponse, headers, status)

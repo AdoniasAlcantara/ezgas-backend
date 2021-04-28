@@ -10,11 +10,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @EnableWebSecurity
 class SecurityConfig(
-        @Value("\${ezgas.api.key}")
-        private val key: String,
+    @Value("\${ezgas.api.key}")
+    private val key: String,
 
-        @Value("\${ezgas.api.secret}")
-        private val secret: String
+    @Value("\${ezgas.api.secret}")
+    private val secret: String
 ) : WebSecurityConfigurerAdapter() {
 
     private val authManager = ApiKeyAuthManager(secret)

@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class EzGasBackendApplication
 
 fun main(args: Array<String>) {
-	runApplication<EzGasBackendApplication>(*args)
+    runApplication<EzGasBackendApplication>(*args)
 }

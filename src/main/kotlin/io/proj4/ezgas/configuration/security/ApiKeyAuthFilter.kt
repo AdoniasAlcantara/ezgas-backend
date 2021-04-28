@@ -5,8 +5,8 @@ import org.springframework.security.web.authentication.preauth.AbstractPreAuthen
 import javax.servlet.http.HttpServletRequest
 
 class ApiKeyAuthFilter(
-        private val key: String,
-        authManager: AuthenticationManager
+    private val key: String,
+    authManager: AuthenticationManager
 ) : AbstractPreAuthenticatedProcessingFilter() {
 
     init {

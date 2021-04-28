@@ -6,4 +6,4 @@ import org.springframework.web.server.ResponseStatusException
 class ResourceNotFoundException(message: String) : ResponseStatusException(NOT_FOUND, message)
 
 class PageNotFoundException(pageNumber: Int) :
-        ResponseStatusException(NOT_FOUND, "The requested page does not exist. Page number was $pageNumber")
+    ResponseStatusException(NOT_FOUND, "The requested page does not exist. Page number was $pageNumber")

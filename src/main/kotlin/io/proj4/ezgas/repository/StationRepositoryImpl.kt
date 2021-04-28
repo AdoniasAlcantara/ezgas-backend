@@ -42,8 +42,6 @@ class StationRepositoryImpl(private val mongo: MongoOperations) : StationReposit
             )
         )
 
-        takeFuelFieldsExcept(fuelType).forEach(::println)
-
         return mongo.aggregatePage(aggregation, pageable, collection)
     }
 
