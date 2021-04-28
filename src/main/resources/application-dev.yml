@@ -6,6 +6,15 @@ spring:
       username: 'ezgas'
       password: '12345'
 
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG
+
 ezgas:
   api:
     key: 'apiKey'
