@@ -1,6 +1,5 @@
 package io.proj4.ezgas.controller
 
-import io.proj4.ezgas.model.FuelType
 import io.proj4.ezgas.request.NearbyQuery
 import io.proj4.ezgas.request.Paging
 import io.proj4.ezgas.service.StationService
@@ -12,12 +11,12 @@ import javax.validation.Valid
 class StationController(private val service: StationService) {
 
     @GetMapping("/{id}")
-    fun getById(@PathVariable id: Int) =
+    fun getById(@PathVariable id: String) =
         service.findById(id)
 
     @GetMapping
-    fun getByIds(@RequestParam ids: Set<Int>, @RequestParam fuels: Set<FuelType>?) =
-        service.findByIdsAndFuels(ids, fuels)
+    fun getAllById(@RequestParam ids: Set<String>) =
+        service.findAllById(ids)
 
     @GetMapping("/nearby")
     fun getNearby(@Valid query: NearbyQuery, @Valid paging: Paging) =
