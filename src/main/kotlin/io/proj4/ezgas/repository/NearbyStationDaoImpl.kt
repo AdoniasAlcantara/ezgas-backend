@@ -31,7 +31,7 @@ class NearbyStationDaoImpl(private val mongo: MongoOperations) : NearbyStationDa
                     .spherical(true)
                     .maxDistance(Distance(distance, KILOMETERS))
                     .inKilometers(),
-                "distance"
+                "place.distance"
             ),
             match(
                 where("fuels.$fuelType.price").ne(null)

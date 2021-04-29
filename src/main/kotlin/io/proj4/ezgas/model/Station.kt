@@ -15,11 +15,5 @@ data class Station(
     val company: String,
     val brand: Brand,
     val fuels: Map<FuelType, Fuel>?,
-    val place: Place?,
-
-    @JsonSerialize(converter = GeoJsonConverter::class)
-    val position: GeoJsonPoint,
-
-    @JsonInclude(NON_NULL)
-    val distance: Double?
+    val place: Place?
 )
