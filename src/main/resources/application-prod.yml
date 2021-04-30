@@ -1,0 +1,9 @@
+spring:
+  data:
+    mongodb:
+      uri: ${DB_URI}
+
+ezgas:
+  api:
+    key: 'apiKey'
+    secret: ${API_SECRET}
