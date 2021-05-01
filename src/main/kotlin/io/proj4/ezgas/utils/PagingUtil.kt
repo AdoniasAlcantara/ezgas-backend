@@ -44,8 +44,8 @@ fun <T : Any> aggregatePage(
     val count = mongoOperations
         .aggregate(countAggregation, collectionName, CountResult::class.java)
         .mappedResults
-        .first()
-        .value
+        .firstOrNull()
 
-    return PageableExecutionUtils.getPage(results, pageable) { count }
+    return PageableExecutionUtils
+        .getPage(results, pageable) { count?.value ?: 0 }
 }
