@@ -1,0 +1,21 @@
+spring:
+  data:
+    mongodb:
+      host: 'localhost'
+      database: 'ezgastest'
+      username: 'ezgas'
+      password: '12345'
+
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG
+
+ezgas:
+  api:
+    key: 'apiKey'
+    secret: '12345'
