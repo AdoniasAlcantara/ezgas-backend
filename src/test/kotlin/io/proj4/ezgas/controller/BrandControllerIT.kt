@@ -21,10 +21,10 @@ import org.springframework.http.HttpStatus
 @Import(RestAssuredTestConfig::class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 class BrandControllerIT(
-    @Autowired requestSpecification: RequestSpecification,
+    @Autowired baseRequestSpec: RequestSpecification,
     @Autowired private val mongo: MongoOperations,
 ) {
-    private val requestSpec = requestSpecification.basePath("/brands")
+    private val requestSpec = baseRequestSpec.basePath("/brands")
     private val expected = fakeBrands(10)
 
     @BeforeEach

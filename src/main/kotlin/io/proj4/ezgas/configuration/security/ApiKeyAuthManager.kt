@@ -8,7 +8,7 @@ class ApiKeyAuthManager(private val secret: String) : AuthenticationManager {
 
     override fun authenticate(auth: Authentication): Authentication {
         if (auth.principal != secret) {
-            throw BadCredentialsException("Unauthorized access")
+            throw BadCredentialsException("Access denied")
         }
 
         return auth.also { it.isAuthenticated = true }

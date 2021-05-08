@@ -6,7 +6,7 @@ import org.bson.types.ObjectId
 
 private val faker = Faker()
 
-fun fakeBrands(count: Int) = (0..count).map {
+fun fakeBrands(count: Int) = (1..count).map {
     Brand(
         id = ObjectId().toHexString(),
         name = faker.company().name()
