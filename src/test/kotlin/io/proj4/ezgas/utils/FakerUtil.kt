@@ -20,7 +20,7 @@ fun fakeBrand() = Brand(
 )
 
 fun fakeBrands(count: Int) =
-    (1..count).map { fakeBrand() }
+    List(count) { fakeBrand() }
 
 fun fakePlace() = faker.address().run {
     Place(
@@ -58,4 +58,4 @@ fun fakeStation() = Station(
 )
 
 fun fakeStations(count: Int) =
-    (1..count).map { fakeStation() }
+    List(count) { fakeStation() }

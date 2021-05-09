@@ -11,6 +11,8 @@ import io.restassured.specification.RequestSpecification
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
@@ -20,12 +22,12 @@ import org.springframework.http.HttpStatus
 
 @Import(RestAssuredTestConfig::class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
+@TestInstance(PER_CLASS)
 class BrandControllerIT(
     @Autowired baseRequestSpec: RequestSpecification,
     @Autowired private val mongo: MongoOperations,
 ) {
     private val requestSpec = baseRequestSpec.basePath("/brands")
-    private val expected = fakeBrands(10)
 
     @BeforeEach
     fun setUp() {
@@ -34,6 +36,7 @@ class BrandControllerIT(
 
     @Test
     fun `should return all brands successfully`() {
+        val expected = fakeBrands(10)
         mongo.insert(expected, "brands")
 
         Given {
