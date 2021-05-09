@@ -1,5 +1,6 @@
 package io.proj4.ezgas.configuration
 
+import io.restassured.RestAssured
 import io.restassured.builder.RequestSpecBuilder
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
@@ -17,10 +18,15 @@ class RestAssuredTestConfig {
         @Value("\${local.server.port}") port: Int,
         @Value("\${ezgas.api.key}") apiKey: String,
         @Value("\${ezgas.api.secret}") secret: String
-    ): RequestSpecification =
-        RequestSpecBuilder()
+    ): RequestSpecification {
+        val config = RestAssured.config()
+            .objectMapperConfig(objectMapperConfig())
+
+        return RequestSpecBuilder()
+            .setConfig(config)
             .setPort(port)
             .addHeader(apiKey, secret)
             .setAccept(ContentType.JSON)
             .build()
+    }
 }
