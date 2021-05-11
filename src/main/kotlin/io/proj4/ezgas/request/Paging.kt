@@ -9,7 +9,7 @@ data class Paging(
     @field:Min(0)
     val pageNumber: Int? = 0,
 
-    @NotNull
-    @Min(1) @Max(50)
+    @field:NotNull
+    @field:Min(1) @field:Max(50)
     val pageSize: Int? = 24
 )
