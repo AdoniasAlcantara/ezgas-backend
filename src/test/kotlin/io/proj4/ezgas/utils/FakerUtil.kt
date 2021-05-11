@@ -22,7 +22,7 @@ fun fakeBrand() = Brand(
 fun fakeBrands(count: Int) =
     List(count) { fakeBrand() }
 
-fun fakePlace() = faker.address().run {
+fun fakePlace(position: GeoJsonPoint) = faker.address().run {
     Place(
         houseNumber = buildingNumber(),
         street = streetAddress(),
@@ -30,7 +30,7 @@ fun fakePlace() = faker.address().run {
         city = cityName(),
         state = state(),
         postalCode = zipCode(),
-        position = GeoJsonPoint(longitude().toDouble(), latitude().toDouble()),
+        position = position,
         distance = null
     )
 }
@@ -44,11 +44,15 @@ fun fakeFuel() = Fuel(
     price = BigDecimal.valueOf(faker.number().randomNumber(3, true), 2)
 )
 
-fun fakeStation() = Station(
+fun fakePosition() = faker.address().run {
+    GeoJsonPoint(longitude().toDouble(), latitude().toDouble())
+}
+
+fun fakeStation(position: GeoJsonPoint = fakePosition()) = Station(
     id = ObjectId().toHexString(),
     company = faker.company().name(),
     brand = fakeBrand(),
-    place = fakePlace(),
+    place = fakePlace(position),
     fuels = mapOf(
         GASOLINE to fakeFuel(),
         ETHANOL to fakeFuel(),
@@ -59,3 +63,6 @@ fun fakeStation() = Station(
 
 fun fakeStations(count: Int) =
     List(count) { fakeStation() }
+
+fun fakeStations(vararg positions: GeoJsonPoint) =
+    positions.map(::fakeStation)
