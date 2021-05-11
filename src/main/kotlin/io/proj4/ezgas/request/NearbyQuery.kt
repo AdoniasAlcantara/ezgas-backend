@@ -15,7 +15,7 @@ data class NearbyQuery(
     val longitude: Double? = null,
 
     @field:NotNull
-    @field:Range(min = 1, max = 25)
+    @field:Range(min = 1, max = 50)
     val distance: Double? = 10.0,
 
     @field:NotNull
