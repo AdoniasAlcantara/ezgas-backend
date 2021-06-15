@@ -22,6 +22,7 @@
         <java.version>11</java.version>
         <kotlin.version>1.4.32</kotlin.version>
         <rest-assured.version>4.2.1</rest-assured.version>
+        <springdoc-openapi-ui.version>1.5.8</springdoc-openapi-ui.version>
     </properties>
 
     <dependencies>
@@ -55,6 +56,18 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${springdoc-openapi-ui.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-kotlin</artifactId>
+            <version>${springdoc-openapi-ui.version}</version>
         </dependency>
 
         <dependency>

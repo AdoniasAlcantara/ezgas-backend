@@ -4,6 +4,7 @@ import io.proj4.ezgas.configuration.RestAssuredTestConfig
 import io.proj4.ezgas.model.FuelType
 import io.proj4.ezgas.model.SortCriteria
 import io.proj4.ezgas.model.Station
+import io.proj4.ezgas.utils.distanceTo
 import io.proj4.ezgas.utils.fakeStations
 import io.proj4.ezgas.utils.resolveIndexesFor
 import io.restassured.module.kotlin.extensions.Given
@@ -22,6 +23,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.data.mongodb.core.MongoOperations
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint
 import org.springframework.http.HttpStatus
+import kotlin.math.ceil
 
 @Import(RestAssuredTestConfig::class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
@@ -53,9 +55,8 @@ class StationControllerNearbyIT(
 
     @Test
     fun `should return stations up to 50Km sorted by distance`() {
-        val expectedTotalItems = 9
         val expectedIds = stations
-            .take(expectedTotalItems)
+            .filterByDistance(50.0)
             .map { it.id }
 
         Given {
@@ -70,16 +71,15 @@ class StationControllerNearbyIT(
         } Then {
             statusCode(HttpStatus.OK.value())
             body("totalPages", `is`(1))
-            body("totalElements", `is`(expectedTotalItems))
+            body("totalElements", `is`(expectedIds.count()))
             body("content.id", equalTo(expectedIds))
         }
     }
 
     @Test
     fun `should return stations up to 10Km sorted by distance`() {
-        val expectedCount = 5
         val expectedIds = stations
-            .take(expectedCount)
+            .filterByDistance(10.0)
             .map { it.id }
 
         Given {
@@ -93,17 +93,16 @@ class StationControllerNearbyIT(
         } Then {
             statusCode(HttpStatus.OK.value())
             body("totalPages", `is`(1))
-            body("totalElements", `is`(expectedCount))
+            body("totalElements", `is`(expectedIds.count()))
             body("content.id", equalTo(expectedIds))
         }
     }
 
     @Test
     fun `should return stations up to 10Km sorted by gasoline price`() {
-        val expectedCount = 5
         val expectedIds = stations
-            .take(expectedCount)
-            .sortedBy { it.fuels?.get(FuelType.GASOLINE)?.price }
+            .filterByDistance(10.0)
+            .sortedByFuelPrice(FuelType.GASOLINE)
             .map { it.id }
 
         Given {
@@ -117,17 +116,16 @@ class StationControllerNearbyIT(
         } Then {
             statusCode(HttpStatus.OK.value())
             body("totalPages", `is`(1))
-            body("totalElements", `is`(expectedCount))
+            body("totalElements", `is`(expectedIds.count()))
             body("content.id", equalTo(expectedIds))
         }
     }
 
     @Test
     fun `should return stations up to 10Km sorted by ethanol price`() {
-        val expectedCount = 5
         val expectedIds = stations
-            .take(expectedCount)
-            .sortedBy { it.fuels?.get(FuelType.ETHANOL)?.price }
+            .filterByDistance(10.0)
+            .sortedByFuelPrice(FuelType.ETHANOL)
             .map { it.id }
 
         Given {
@@ -141,17 +139,16 @@ class StationControllerNearbyIT(
         } Then {
             statusCode(HttpStatus.OK.value())
             body("totalPages", `is`(1))
-            body("totalElements", `is`(expectedCount))
+            body("totalElements", `is`(expectedIds.count()))
             body("content.id", equalTo(expectedIds))
         }
     }
 
     @Test
     fun `should return stations up to 10Km sorted by diesel price`() {
-        val expectedCount = 5
         val expectedIds = stations
-            .take(expectedCount)
-            .sortedBy { it.fuels?.get(FuelType.DIESEL)?.price }
+            .filterByDistance(10.0)
+            .sortedByFuelPrice(FuelType.DIESEL)
             .map { it.id }
 
         Given {
@@ -165,17 +162,16 @@ class StationControllerNearbyIT(
         } Then {
             statusCode(HttpStatus.OK.value())
             body("totalPages", `is`(1))
-            body("totalElements", `is`(expectedCount))
+            body("totalElements", `is`(expectedIds.count()))
             body("content.id", equalTo(expectedIds))
         }
     }
 
     @Test
     fun `should return stations up to 10Km sorted by dieselS10 price`() {
-        val expectedCount = 5
         val expectedIds = stations
-            .take(expectedCount)
-            .sortedBy { it.fuels?.get(FuelType.DIESEL_S10)?.price }
+            .filterByDistance(10.0)
+            .sortedByFuelPrice(FuelType.DIESEL_S10)
             .map { it.id }
 
         Given {
@@ -189,20 +185,21 @@ class StationControllerNearbyIT(
         } Then {
             statusCode(HttpStatus.OK.value())
             body("totalPages", `is`(1))
-            body("totalElements", `is`(expectedCount))
+            body("totalElements", `is`(expectedIds.count()))
             body("content.id", equalTo(expectedIds))
         }
     }
 
     @Test
     fun `should return the last page of stations up to 50Km sorted by distance`() {
-        val expectedPageNumber = 2
-        val expectedPageSize = 3
-        val expectedTotalItems = 9
-        val expectedTotalPages = 3
-        val expectedIds = stations
-            .drop(6)
-            .take(3)
+        val distance = 50.0
+        val items = stations.filterByDistance(distance)
+        val pageSize = 3
+        val totalPages = ceil(items.count().toFloat() / pageSize).toInt()
+        val lastPage = totalPages - 1
+        val expectedIds = items
+            .chunked(pageSize)
+            .last()
             .map { it.id }
 
         Given {
@@ -210,20 +207,21 @@ class StationControllerNearbyIT(
             param("latitude", centre.y)
             param("longitude", centre.x)
             param("fuel", FuelType.values().random())
-            param("distance", 50.0)
+            param("distance", distance)
             param("sort", SortCriteria.DISTANCE)
-            param("pageNumber", expectedPageNumber)
-            param("pageSize", expectedPageSize)
+            param("pageNumber", lastPage)
+            param("pageSize", pageSize)
         } When {
             get()
         } Then {
             statusCode(HttpStatus.OK.value())
-            body("number", `is`(expectedPageNumber))
-            body("size", `is`(expectedPageSize))
-            body("totalElements", `is`(expectedTotalItems))
-            body("totalPages", `is`(expectedTotalPages))
+            body("number", `is`(lastPage))
+            body("size", `is`(pageSize))
+            body("totalElements", `is`(items.count()))
+            body("totalPages", `is`(totalPages))
             body("content.id", equalTo(expectedIds))
         }
+
     }
 
     @Test
@@ -422,5 +420,13 @@ class StationControllerNearbyIT(
     private fun ValidatableResponse.assertThatStatusIsBadRequest() {
         statusCode(HttpStatus.BAD_REQUEST.value())
         body("error", equalTo("Bad Request"))
+    }
+
+    private fun List<Station>.filterByDistance(distance: Double) = filter {
+        centre distanceTo it.place!!.position <= distance
+    }
+
+    private fun List<Station>.sortedByFuelPrice(fuelType: FuelType) = sortedBy {
+        it.fuels?.get(fuelType)?.price
     }
 }
