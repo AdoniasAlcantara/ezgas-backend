@@ -19,4 +19,4 @@ ezgas:
   api:
     key: 'apiKey'
     secret: '12345'
-    origin: 'http://localhost'
+    origin: '*'

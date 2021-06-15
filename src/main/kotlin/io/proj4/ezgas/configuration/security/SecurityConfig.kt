@@ -27,6 +27,7 @@ class SecurityConfig(
         val configuration = CorsConfiguration().apply {
             addAllowedOrigin(origin)
             addAllowedMethod(HttpMethod.GET)
+            addAllowedHeader("*")
         }
 
         return UrlBasedCorsConfigurationSource().apply {
