@@ -40,10 +40,13 @@ class SecurityIT(
     }
 
     @Test
-    fun `should grant access to allowed origin`() {
+    fun `should grant access to allowed origin along with custom headers`() {
         val requestSpec = baseRequestSpec
             .addHeader(apiKey, secret)
             .addHeader("Origin", origin)
+            .addHeader("Access-Control-Request-Method", "GET")
+            .addHeader("User-Agent", "RestAssured/4.2.1")
+            .addHeader("Accept", "*/*")
             .build()
 
         Given {
