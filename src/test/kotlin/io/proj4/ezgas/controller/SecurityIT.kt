@@ -16,7 +16,8 @@ import org.springframework.http.HttpStatus
 class SecurityIT(
     @LocalServerPort port: Int,
     @Value("\${ezgas.api.key}") private val apiKey: String,
-    @Value("\${ezgas.api.secret}") private val secret: String
+    @Value("\${ezgas.api.secret}") private val secret: String,
+    @Value("\${ezgas.api.origin}") private val origin: String
 ) {
     private val baseRequestSpec = RequestSpecBuilder()
         .setPort(port)
@@ -35,6 +36,39 @@ class SecurityIT(
         } Then {
             statusCode(HttpStatus.OK.value())
             body("uptime", Matchers.notNullValue())
+        }
+    }
+
+    @Test
+    fun `should grant access to allowed origin`() {
+        val requestSpec = baseRequestSpec
+            .addHeader(apiKey, secret)
+            .addHeader("Origin", origin)
+            .build()
+
+        Given {
+            spec(requestSpec)
+        } When {
+            get()
+        } Then {
+            statusCode(HttpStatus.OK.value())
+            body("uptime", Matchers.notNullValue())
+        }
+    }
+
+    @Test
+    fun `should block disallowed origin`() {
+        val requestSpec = baseRequestSpec
+            .addHeader(apiKey, secret)
+            .addHeader("Origin", "https://not-allowed-origin")
+            .build()
+
+        Given {
+            spec(requestSpec)
+        } When {
+            get()
+        } Then {
+            statusCode(HttpStatus.FORBIDDEN.value())
         }
     }
 

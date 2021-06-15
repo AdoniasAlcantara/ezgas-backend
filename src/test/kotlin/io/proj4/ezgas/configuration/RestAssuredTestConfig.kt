@@ -17,7 +17,8 @@ class RestAssuredTestConfig {
     fun createRequestSpecification(
         @Value("\${local.server.port}") port: Int,
         @Value("\${ezgas.api.key}") apiKey: String,
-        @Value("\${ezgas.api.secret}") secret: String
+        @Value("\${ezgas.api.secret}") secret: String,
+        @Value("\${ezgas.api.origin}") origin: String
     ): RequestSpecification {
         val config = RestAssured.config()
             .objectMapperConfig(objectMapperConfig())
@@ -26,6 +27,7 @@ class RestAssuredTestConfig {
             .setConfig(config)
             .setPort(port)
             .addHeader(apiKey, secret)
+            .addHeader("Origin", origin)
             .setAccept(ContentType.JSON)
             .build()
     }
