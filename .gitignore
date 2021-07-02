@@ -2,7 +2,6 @@ HELP.md
 target/
 !**/src/main/**
 !**/src/test/**
-.mvn
 
 ### STS ###
 .apt_generated
