@@ -3,8 +3,6 @@ target/
 !**/src/main/**
 !**/src/test/**
 .mvn
-mvnw
-mvnw.cmd
 
 ### STS ###
 .apt_generated
