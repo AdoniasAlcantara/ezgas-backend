@@ -16,7 +16,7 @@ data class Place(
     val postalCode: String,
 
     @JsonSerialize(converter = GeoJsonConverter::class)
-    @GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
+    @field:GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
     val position: GeoJsonPoint,
 
     @JsonInclude(JsonInclude.Include.NON_NULL)

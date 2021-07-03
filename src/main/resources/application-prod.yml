@@ -2,6 +2,7 @@ spring:
   data:
     mongodb:
       uri: ${DB_URI}
+      auto-index-creation: true
 
 ezgas:
   api:
