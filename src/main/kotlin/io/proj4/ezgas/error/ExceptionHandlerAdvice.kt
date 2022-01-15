@@ -4,6 +4,7 @@ import io.proj4.ezgas.utils.errorDetails
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.BAD_REQUEST
+import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.BindException
 import org.springframework.web.bind.MissingServletRequestParameterException
@@ -12,11 +13,17 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.context.request.ServletWebRequest
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
+import org.springframework.web.server.ResponseStatusException
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import java.time.OffsetDateTime
 
 @RestControllerAdvice
 class ExceptionHandlerAdvice : ResponseEntityExceptionHandler() {
+
+    @ExceptionHandler(ResourceNotFoundException::class, InvalidQueryException::class)
+    fun handleResourceNotFound(ex: ResponseStatusException, request: WebRequest): ResponseEntity<*> {
+        return newErrorResponse(HttpHeaders(), NOT_FOUND, request, ex.reason)
+    }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException::class)
     fun handleMethodArgumentTypeMismatch(

@@ -55,6 +55,10 @@ class StationService(
     fun findFuelHistory(id: String, query: HistoryQuery): List<FuelHistory> {
         val (fuelType, startDate, endDate) = query
 
+        if (!ObjectId.isValid(id)) {
+            throw InvalidQueryException("$id is not a valid station ID")
+        }
+
         if (endDate!!.isBefore(startDate)) {
             throw InvalidQueryException("startDate $startDate must be before the endDate $endDate")
         }

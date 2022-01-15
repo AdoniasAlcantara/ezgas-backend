@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull
 
 data class HistoryQuery(
     @field:NotNull
-    val fuelType: FuelType? = null,
+    val fuel: FuelType? = null,
 
     @field:NotNull
     @field:DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
