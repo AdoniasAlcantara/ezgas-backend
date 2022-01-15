@@ -21,6 +21,6 @@ data class NearbyQuery(
     @field:NotNull
     val fuel: FuelType? = null,
 
-    @NotNull
+    @field:NotNull
     val sort: SortCriteria? = SortCriteria.PRICE
 )
