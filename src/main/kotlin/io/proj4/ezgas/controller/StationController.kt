@@ -1,5 +1,6 @@
 package io.proj4.ezgas.controller
 
+import io.proj4.ezgas.request.HistoryQuery
 import io.proj4.ezgas.request.NearbyQuery
 import io.proj4.ezgas.request.Paging
 import io.proj4.ezgas.service.StationService
@@ -21,4 +22,8 @@ class StationController(private val service: StationService) {
     @GetMapping("/nearby")
     fun getNearby(@Valid query: NearbyQuery, @Valid paging: Paging) =
         service.findNearby(query, paging)
+
+    @GetMapping("/{id}/fuelHistory")
+    fun getFuelHistory(@PathVariable id: String, @Valid query: HistoryQuery) =
+        service.findFuelHistory(id, query)
 }
