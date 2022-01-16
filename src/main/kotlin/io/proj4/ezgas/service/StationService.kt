@@ -67,7 +67,7 @@ class StationService(
             throw InvalidQueryException("Period between $startDate and $endDate is too long")
         }
 
-        return fuelHistoryRepository.findByStationIdAndFuelTypeAndDateBetween(
+        return fuelHistoryRepository.find(
             ObjectId(id),
             fuelType!!,
             startDate!!,
