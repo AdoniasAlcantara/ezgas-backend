@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.data.mongodb.core.MongoOperations
 import org.springframework.http.HttpStatus
 import java.time.LocalDate
+import java.util.Comparator.comparing
 
 @Import(RestAssuredTestConfig::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -69,6 +70,7 @@ class StationControllerFuelHistoryIT(
             assertThat(actual).hasSameSizeAs(expected)
             assertThat(actual).containsAll(expected)
             assertThat(actual).doesNotContainAnyElementsOf(before)
+            assertThat(actual).isSortedAccordingTo(comparing { it.date })
         }
     }
 
@@ -117,6 +119,7 @@ class StationControllerFuelHistoryIT(
             assertThat(actual).containsAll(expected)
             assertThat(actual).doesNotContainAnyElementsOf(before)
             assertThat(actual).doesNotContainAnyElementsOf(after)
+            assertThat(actual).isSortedAccordingTo(comparing { it.date })
         }
     }
 
